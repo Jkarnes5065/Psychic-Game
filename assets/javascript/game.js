@@ -1,39 +1,53 @@
-// Creates an array that lists out all of the options (Rock, Paper, or Scissors).
-var maximumTries = 10;
-var letters = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"];
-var win = 0;
-var losses = 0;
-var guesses = 10;
-var guessesLeft = 10;
-var win = document.getElementById("win");
-var lose = document.getElementById("lose");
-var guessesLeft = document.getElementById("guessesLeft");
-
-// This function is run whenever the user presses a key.
-document.onkeyup = function(event) {
-
-    // Determines which key was pressed
-    var userGuess = event.key.toUpperCase()];
-
-// Randomly chooses a choice from the options array. This is the Computer's guess.
-var computerGuess = options[Math.floor(Math.random() * options.length)];
+  $(document).ready(function(){
+    var letters = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"];
+    var guessedLetters = [];
+    var letterToGuess = null;
+    var guessesLeft = 9;
+    var wins = 0;
+    var losses = 0;
 
 
-if (userGuess == "A" && computerGuess == "A") {
-    win++;
-    win.textContent = win;
-    $("#guessesLeft").click(function() {
-        $("#guessesLeft")[0].reset();
-    });
+    var updateLetterToGuess = function() {
+      letterToGuess = letters[Math.floor(Math.random() * letters.length)];
+    };
 
-else if (userGuess == "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z" && computerGuess == "A") {
-    losses++;
-    lose.textContent = losses;
-    guessesLeft-1;
+    var updateGuessesSoFar = function() {
+      document.querySelector("#guesses-so-far").innerHTML = guessedLetters.join(", ");
+    };
+
+    var reset = function() {
+      guessesLeft = 9;
+      guessedLetters = [];
+      updateLetterToGuess();
+      updateGuessesLeft();
+    var updateGuessesLeft = function() {
+      document.querySelector("#guesses-left").innerHTML = guessesLeft;
+    };
+      updateGuessesSoFar();
+      updateLetterToGuess();
+      updateGuessesLeft();
+
+    document.onkeyup = function(event) {
+      guessesLeft--;
+
+      var letter = String.fromCharCode(event.keyCode).toLowerCase();
+
+      guessedLetters.push(letter);
+      
+      updateGuessesLeft();
+      updateGuessesSoFar();
 
 
+      if (letter === letterToGuess) {
+        wins++;
+        document.querySelector("#wins").innerHTML = wins;
+        reset();
+      }
 
+      if (guessesLeft === 0) {
 
-
-
-};
+        losses++;
+        document.querySelector("#losses").innerHTML = losses;
+        reset();
+      }
+    };
